@@ -4,7 +4,7 @@ import FormPost from "./PostForm";
 
 export default function Post() {
   const [getpost, setpost] = useState([]);
-  const [edit, setEditing] = useState(null);
+  const [editMode, setEditingMode] = useState(null);
 
   useEffect(() => {
     getPost().then((res) => setpost(res.data));
@@ -17,7 +17,7 @@ export default function Post() {
   };
 
   const handleEditing = (data) => {
-    setEditing(data);
+    setEditingMode(data);
   };
 
   return (
@@ -26,8 +26,8 @@ export default function Post() {
       <FormPost
         getpost={getpost}
         setPost={setpost}
-        edit={edit}
-        setEditing={setEditing}
+        editMode={editMode}
+        setEditingMode={setEditingMode}
       ></FormPost>
       {getpost.map((post) => {
         return (

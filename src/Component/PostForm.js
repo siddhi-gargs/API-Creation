@@ -1,31 +1,38 @@
 import React, { useEffect, useState } from "react";
 import { addPost, updatePost } from "../Services/postservice";
 
-export default function FormPost({ getpost, setPost, edit, setEditing }) {
+export default function FormPost({
+  getpost,
+  setPost,
+  editMode,
+  setEditingMode,
+}) {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
 
   useEffect(() => {
-    if (edit) {
-      setTitle(edit.title);
-      setBody(edit.body);
+    if (editMode) {
+      setTitle(editMode.title);
+      setBody(editMode.body);
     } else {
-      setTitle("");
-      setBody("");
+      clearInputs();
     }
-  }, [edit]);
+  }, [editMode]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    edit ? editPost() : addnewPost();
+
+    editMode ? editPost() : addnewPost();
+    clearInputs();
+  };
+
+  const clearInputs = () => {
     setTitle("");
     setBody("");
   };
 
   const addnewPost = () => {
-    let id = 201;
     addPost({
-      id: id++,
       title,
       body,
     }).then((response) => {
@@ -34,14 +41,14 @@ export default function FormPost({ getpost, setPost, edit, setEditing }) {
   };
 
   const editPost = () => {
-    updatePost(edit.id, {
+    updatePost(editMode.id, {
       title,
       body,
     }).then((response) => {
       setPost(
-        getpost.map((data) => (data.id === edit.id ? response.data : data)),
+        getpost.map((data) => (data.id === editMode.id ? response.data : data)),
       );
-      setEditing(null);
+      setEditingMode(null);
     });
   };
 
